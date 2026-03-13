@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://3a8dsqap7bu"]
+
+[ext_resource type="Script" uid="uid://ctdfde6e3ehnn" path="res://inimigo_1.gd" id="1_miy63"]
+[ext_resource type="PackedScene" uid="uid://whbsh7qgl8nu" path="res://3D/Modelos/lobaoo.glb" id="2_fwwet"]
+
+[sub_resource type="Curve3D" id="Curve3D_8nd5y"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_miy63"]
+height = 5.2369385
+radius = 3.734375
+
+[node name="Inimigo 1" type="Node3D"]
+script = ExtResource("1_miy63")
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_8nd5y")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+
+[node name="Pivo" type="Node3D" parent="Path3D/PathFollow3D"]
+
+[node name="lobaoo" parent="Path3D/PathFollow3D/Pivo" instance=ExtResource("2_fwwet")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Path3D/PathFollow3D/Pivo/lobaoo/Armature" index="0"]
+bones/1/rotation = Quaternion(-0.00382765, -1.1920837e-07, 4.5629134e-10, 0.99999267)
+bones/2/rotation = Quaternion(1.8144124e-06, 0.71063334, 0.70356256, 1.8326472e-06)
+bones/3/rotation = Quaternion(0.38677526, 6.853121e-14, -1.994904e-06, 0.92217404)
+bones/4/rotation = Quaternion(-0.39593184, -1.8178323e-13, 2.0421314e-06, 0.9182799)
+bones/5/rotation = Quaternion(0.37560582, 0.61951935, -0.5775225, 0.3762763)
+bones/6/rotation = Quaternion(0.021653686, -0.0031307177, -0.47877982, 0.87766236)
+bones/7/rotation = Quaternion(-0.69279855, 4.540679e-08, 0.0051165847, 0.7211131)
+bones/8/rotation = Quaternion(-0.42022568, -0.5420274, 0.6503067, -0.3266769)
+bones/9/rotation = Quaternion(-0.07336712, -0.071264744, -0.4736204, 0.87476987)
+bones/12/rotation = Quaternion(0.021653624, 0.0031306646, 0.47877988, 0.87766236)
+bones/13/rotation = Quaternion(-0.69279855, -6.12138e-08, -0.0051165605, 0.7211131)
+bones/14/rotation = Quaternion(0.42022896, -0.54202574, 0.6503045, 0.32667997)
+bones/15/rotation = Quaternion(-0.07336715, 0.0712644, 0.47362036, 0.8747699)
+
+[node name="Area3D" type="Area3D" parent="Path3D/PathFollow3D/Pivo"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Path3D/PathFollow3D/Pivo/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.76308656, 2.352625)
+shape = SubResource("CylinderShape3D_miy63")
+
+[node name="espera ataque" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
+
+[connection signal="body_entered" from="Path3D/PathFollow3D/Pivo/Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Path3D/PathFollow3D/Pivo/Area3D" to="." method="_on_area_3d_area_exited"]
+[connection signal="timeout" from="espera ataque" to="." method="_on_cooldown_attack_timeout"]
+
+[editable path="Path3D/PathFollow3D/Pivo/lobaoo"]
